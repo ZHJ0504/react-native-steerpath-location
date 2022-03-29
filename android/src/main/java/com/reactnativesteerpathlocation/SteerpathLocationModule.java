@@ -2,6 +2,8 @@ package com.reactnativesteerpathlocation;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 
+import java.util.HashMap;
+
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -31,7 +33,7 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
   public static final String NAME = "SteerpathLocation";
   private static final String KEY = "eyJhbGciOiJSUzI1NiJ9.eyJpYXQ6IjoxNTUyMzk2NDk1LCJqdGkiOiI2NDU4OGM5Zi1lYTA4LTQ5NGMtYjgwMi04N2ZmNzcyNjg3YzAiLCJzY29wZXMiOiJ2Mi1lYWY2ODc3OC05ZGEzLTRhNWUtYWQ4NC05ZDUwNDNhMDQ4YWYtcHVibGlzaGVkOnIiLCJzdWIiOiJ2Mi1lYWY2ODc3OC05ZGEzLTRhNWUtYWQ4NC05ZDUwNDNhMDQ4YWYifQ.lWGDm-gZda54YItEtzZEuxv8vVy24FfRBzY25sWyqPtA3J3vBFCTz1E-8bam1-WAR2MEkGRRNCfyV1ZQ1NHU3i2mDDLi2NcogGm3ESO1kcXmwj-LiyWUHN3e0IZji0CRCtHHIS6Z4uavQPGpNXzOFq2yX40KoGQuvupHxqFarCb4XGpYiiws3H08cIIaoC70dKNCGthnWajBvXjhENXSG4QzoUutj8TV3OEaohFx2xfS_i7jBYxnauhB86GduVNkCjvXwM5bhknrf6OgFrHMXhaaf2nk82GSElM8y0nGQ2Y7G9KqhCyU2_8ifzeqqno8gvWQiedGLm0uTpL0bZMeNg";
   private static final String REGION = "AP1";
-  //Default configuration for client
+  // Default configuration for client
   public static final String DEFAULT_APIKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZXMiOiJiYXNlOnI7c3RlZXJwYXRoX3N0YXRpYzpyO3N0ZWVycGF0aF9keW5hbWljOnIiLCJtZXRhQWNjZXNzIjoieSIsImp0aSI6IjhlNTA2OWRhLTViNDEtNGYxZS1iYjYzLTE3NmE0Y2FjMDcyOCIsInN1YiI6InN0ZWVycGF0aCIsImVkaXRSaWdodHMiOiIiLCJlaWRBY2Nlc3MiOiJ5In0.in8zIUm_ZlVhmYPhRMsMxShlqCH0nJnof0kRlWyKuQw";
   public static final String DEFAULT_NAME = "SDE4";
   public static final String DEFAULT_REGION = "AP1";
@@ -57,23 +59,28 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
     int developerOptionsWithMonitor;
     if (useMonitor)
       developerOptionsWithMonitor = DeveloperOptions.getDefaultOptions() | DeveloperOptions.WITH_HEALTH_MONITOR;
-    else developerOptionsWithMonitor = DeveloperOptions.DISABLED;
+    else
+      developerOptionsWithMonitor = DeveloperOptions.DISABLED;
 
     SteerpathClient.StartConfig.Builder builder = new SteerpathClient.StartConfig.Builder()
-      .name(NAME)
-      .apiKey(KEY)
+        .name(NAME)
+        .apiKey(KEY)
 
-      // 3. Enables some developer options. PLEASE DISABLE DEVELOPER OPTIONS IN PRODUCTION!
-      // This will add "Monitor"-button above "LocateMe"-button as a visual reminder developer options are in use
-      // Use logcat filter "Monitor", for example: adb logcat *:S Monitor:V
+        // 3. Enables some developer options. PLEASE DISABLE DEVELOPER OPTIONS IN
+        // PRODUCTION!
+        // This will add "Monitor"-button above "LocateMe"-button as a visual reminder
+        // developer options are in use
+        // Use logcat filter "Monitor", for example: adb logcat *:S Monitor:V
 
-      .developerOptions(developerOptionsWithMonitor);
+        .developerOptions(developerOptionsWithMonitor);
     builder.region(REGION);
 
     SteerpathClient.StartConfig config = builder.build();
 
-    // NOTE: start() will initialize things in background AsyncTask. This is because installing OfflineBundle is potentially time consuming operation
-    // and it shouldn't be done in the main thread. For this reason, app should wait onStarted() callback to be invoked before starting using its features.
+    // NOTE: start() will initialize things in background AsyncTask. This is because
+    // installing OfflineBundle is potentially time consuming operation
+    // and it shouldn't be done in the main thread. For this reason, app should wait
+    // onStarted() callback to be invoked before starting using its features.
     SteerpathClient.getInstance().start(context, config, new SteerpathClient.OfflineBundleStartListener() {
       @Override
       public void onMapReady() {
@@ -90,19 +97,22 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
       }
     });
 
-    // If you need to start Telemetry manually, be sure not to call SteerpathClient.StartConfig.Builder.telemetry()
-    //delayTelemetryStart();
+    // If you need to start Telemetry manually, be sure not to call
+    // SteerpathClient.StartConfig.Builder.telemetry()
+    // delayTelemetryStart();
   }
 
   @Override
   public void onLocationChanged(Location location) {
-    // When bluetooth or location services has just been turned off, there might still be
+    // When bluetooth or location services has just been turned off, there might
+    // still be
     // a Location update event coming from the pipeline.
-    // These checks has no other purpose but to keep infoText reflecting the state of BL or Location Services.
-    Log.i ("NOK", String.valueOf(location.getLongitude()));
-    Log.i ("NOK", String.valueOf(location.getLatitude()));
-    Log.i ("NOK", String.valueOf(location.getFloorIndex()));
-    Log.i ("NOK", String.valueOf(location.getBuildingId()));
+    // These checks has no other purpose but to keep infoText reflecting the state
+    // of BL or Location Services.
+    Log.i("NOK", String.valueOf(location.getLongitude()));
+    Log.i("NOK", String.valueOf(location.getLatitude()));
+    Log.i("NOK", String.valueOf(location.getFloorIndex()));
+    Log.i("NOK", String.valueOf(location.getBuildingId()));
   }
 
   private void startPositioning() {
@@ -132,11 +142,11 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
   }
 
   private void sendEvent(ReactContext reactContext,
-                         String eventName,
-                         @Nullable WritableMap params) {
+      String eventName,
+      @Nullable WritableMap params) {
     reactContext
-      .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-      .emit(eventName, params);
+        .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+        .emit(eventName, params);
   }
 
   // Bluetooth and Location Services must be on
@@ -146,23 +156,26 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
   }
 
   @ReactMethod
-  public void hasStarted() {
-    WritableMap map = new WritableNativeMap();
-    map.putBoolean("started", hasStarted);
-    sendEvent(appContext, "getHasStarted", map);
+  public void stop() {
+    LocationServices.getFusedLocationProviderApi().removeLocationUpdates(this);
   }
 
   @ReactMethod
-  public void getUserLocation() {
-    WritableMap map = new WritableNativeMap();
+  public void hasStarted(Promise promise) {
+    promise.resolve(hasStarted);
+  }
+
+  @ReactMethod
+  public void getUserLocation(Promise promise) {
+    HashMap map = new HashMap<>();
     if (hasStarted) {
       Location userLocation = getLocation();
-      map.putDouble("latitude", userLocation.getLatitude());
-      map.putDouble("longitude", userLocation.getLongitude());
-      map.putString("buildingRef", userLocation.getBuildingId());
-      map.putInt("floorIndex", userLocation.getFloorIndex());
+      map.put("latitude", userLocation.getLatitude());
+      map.put("longitude", userLocation.getLongitude());
+      map.put("buildingRef", userLocation.getBuildingId());
+      map.put("floorIndex", userLocation.getFloorIndex());
     }
     // otherwise return an empty map
-    sendEvent(appContext, "location", map);
+    promise.resolve(map);
   }
 }

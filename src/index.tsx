@@ -17,6 +17,18 @@ const SteerpathLocation = NativeModules.SteerpathLocation
       }
     );
 
-export function multiply(a: number, b: number): Promise<number> {
-  return SteerpathLocation.multiply(a, b);
+export function start() {
+  SteerpathLocation.start();
+}
+
+export function stop() {
+  SteerpathLocation.stop();
+}
+
+export function hasStarted(): Promise<boolean> {
+  return SteerpathLocation.hasStarted();
+}
+
+export function getUserLocation(): Promise<any> {
+  return SteerpathLocation.getUserLocation();
 }
