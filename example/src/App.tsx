@@ -7,7 +7,7 @@ export default function App() {
   const [result, setResult] = React.useState<boolean | undefined>();
 
   React.useEffect(() => {
-    hasStarted().then(setResult);
+    setResult(hasStarted());
   }, []);
 
   return (

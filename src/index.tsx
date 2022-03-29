@@ -25,10 +25,10 @@ export function stop() {
   SteerpathLocation.stop();
 }
 
-export function hasStarted(): Promise<boolean> {
+export function hasStarted(): boolean {
   return SteerpathLocation.hasStarted();
 }
 
-export function getUserLocation(): Promise<any> {
+export function getUserLocation(): any {
   return SteerpathLocation.getUserLocation();
 }

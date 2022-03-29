@@ -2,8 +2,6 @@ package com.reactnativesteerpathlocation;
 
 import static android.content.Context.BLUETOOTH_SERVICE;
 
-import java.util.HashMap;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothManager;
@@ -18,7 +16,6 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.steerpath.sdk.common.DeveloperOptions;
@@ -26,6 +23,8 @@ import com.steerpath.sdk.common.SteerpathClient;
 import com.steerpath.sdk.location.Location;
 import com.steerpath.sdk.location.LocationListener;
 import com.steerpath.sdk.location.LocationServices;
+
+import java.util.HashMap;
 
 // Assume that permission is already given as this feature will not check and request for location permission
 @ReactModule(name = SteerpathLocationModule.NAME)
@@ -161,12 +160,12 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
   }
 
   @ReactMethod
-  public void hasStarted(Promise promise) {
-    promise.resolve(hasStarted);
+  public boolean hasStarted() {
+    return hasStarted;
   }
 
   @ReactMethod
-  public void getUserLocation(Promise promise) {
+  public HashMap getUserLocation() {
     HashMap map = new HashMap<>();
     if (hasStarted) {
       Location userLocation = getLocation();
@@ -176,6 +175,6 @@ public class SteerpathLocationModule extends ReactContextBaseJavaModule implemen
       map.put("floorIndex", userLocation.getFloorIndex());
     }
     // otherwise return an empty map
-    promise.resolve(map);
+    return map;
   }
 }
